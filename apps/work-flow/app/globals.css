@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --font-family-sans: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, 'Liberation Sans', sans-serif;
+  --font-size-base: 15px;         /* or 16px, adjust as needed */
+  --line-height-base: 1.5;        /* or 24px, adjust as needed */
+  --letter-spacing-base: 0.01em;  /* adjust for word/character gap */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-family-sans);
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;                 /* Safari and Chrome */
+}
+.scroll-hidden {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+.scroll-hidden::-webkit-scrollbar {
+  display: none;             /* Chrome, Safari */
+}
+
+* {
+  font-family: var(--font-family-sans);
+}
+.primary{
+  font-family: var(--font-family-sans);
+}
+.description {
+  color: white; /* Tailwind gray-500 */
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+}

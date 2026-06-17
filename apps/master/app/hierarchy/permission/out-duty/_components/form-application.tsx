@@ -1,0 +1,412 @@
+"use client"
+
+import React, { useState, useEffect } from "react"
+import { Label } from "@repo/ui/components/ui/label"
+import { Shield } from "lucide-react"
+import { useRolePermissions } from "@/hooks/role-control/useRolePermissionsByScreenArray"
+import { useSearchParams } from "next/navigation"
+
+interface PermissionData {
+  outDutychApplicationsSelf?: boolean
+  outDutyApplicationsAll?: boolean
+  outDutyApplicationApprover?: boolean
+  outDutyApplicationsCancel?: boolean
+  outDutyApplicationsApprove?: boolean
+  outDutyApplicationsReject?: boolean
+  outDutyApplicationsSelfCancel?: boolean
+  outDutyApplicationsAllCancel?: boolean
+}
+
+interface FormApplicationProps {
+  initialData?: PermissionData
+  onSave?: (data: PermissionData) => void
+  mode?: "add" | "edit" | "view"
+}
+
+export default function FormApplication({ 
+  initialData, 
+  onSave, 
+  mode = "add" 
+}: FormApplicationProps) {
+  const searchParams = useSearchParams()
+  const modeView = searchParams.get('mode');
+  // Role-based permissions for this page (centralized under Role & Permissions)
+  const { responseData: rolePermissions } = useRolePermissions({
+    serviceName: "roleControl",
+    screenName: "rolePermissions",
+  })
+
+  const editMode = modeView != "permissionview"? rolePermissions?.edit : false
+  const addMode = modeView != "permissionview"? rolePermissions?.add : false
+
+  const isReadOnly = mode === "view" || (!editMode && !addMode)
+
+  const [permissions, setPermissions] = useState<PermissionData>({
+    outDutychApplicationsSelf: false,
+    outDutyApplicationsAll: false,
+    outDutyApplicationApprover: false,
+    outDutyApplicationsCancel: false,
+    outDutyApplicationsApprove: false,
+    outDutyApplicationsReject: false,
+    outDutyApplicationsSelfCancel: false,
+    outDutyApplicationsAllCancel: false,
+    ...initialData,
+  })
+
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (initialData) {
+      setPermissions({ ...initialData })
+    }
+  }, [initialData])
+
+  const handlePermissionChange = (key: keyof PermissionData, value: boolean) => {
+    const newPermissions = { ...permissions, [key]: value }
+
+    // Make the two main toggles mutually exclusive
+    if (key === "outDutychApplicationsSelf" && value) {
+      newPermissions.outDutyApplicationsAll = false
+      newPermissions.outDutyApplicationsAllCancel = false
+      newPermissions.outDutyApplicationsCancel = false
+      newPermissions.outDutyApplicationsApprove = false
+      newPermissions.outDutyApplicationsReject = false
+      newPermissions.outDutyApplicationApprover = false
+    } else if (key === "outDutyApplicationsAll" && value) {
+      newPermissions.outDutychApplicationsSelf = false
+      newPermissions.outDutyApplicationsSelfCancel = false
+    } else if (key === "outDutychApplicationsSelf" && !value) {
+      newPermissions.outDutyApplicationsSelfCancel = false
+    } else if (key === "outDutyApplicationsAll" && !value) {
+      newPermissions.outDutyApplicationsAllCancel = false
+      newPermissions.outDutyApplicationsCancel = false
+      newPermissions.outDutyApplicationsApprove = false
+      newPermissions.outDutyApplicationsReject = false
+      newPermissions.outDutyApplicationApprover = false
+    }
+
+    // If outDutyApplicationApprover is unchecked, clear approve/reject/cancel actions
+    if (key === "outDutyApplicationApprover" && !value) {
+      newPermissions.outDutyApplicationsCancel = false
+      newPermissions.outDutyApplicationsApprove = false
+      newPermissions.outDutyApplicationsReject = false
+    }
+
+    setPermissions(newPermissions)
+  }
+
+  /**
+   * Build payload so that only the current section's values are taken from the live form
+   * and all other fields fall back to the last loaded values from `initialData`.
+   */
+  const buildSectionPayload = (section: "applicationManagement" | "approver") => {
+    const base: PermissionData = {
+      outDutychApplicationsSelf: initialData?.outDutychApplicationsSelf ?? false,
+      outDutyApplicationsAll: initialData?.outDutyApplicationsAll ?? false,
+      outDutyApplicationApprover: initialData?.outDutyApplicationApprover ?? false,
+      outDutyApplicationsCancel: initialData?.outDutyApplicationsCancel ?? false,
+      outDutyApplicationsApprove: initialData?.outDutyApplicationsApprove ?? false,
+      outDutyApplicationsReject: initialData?.outDutyApplicationsReject ?? false,
+      outDutyApplicationsSelfCancel: initialData?.outDutyApplicationsSelfCancel ?? false,
+      outDutyApplicationsAllCancel: initialData?.outDutyApplicationsAllCancel ?? false,
+    }
+
+    if (section === "applicationManagement") {
+      base.outDutychApplicationsSelf = !!permissions.outDutychApplicationsSelf
+      base.outDutyApplicationsAll = !!permissions.outDutyApplicationsAll
+      base.outDutyApplicationsSelfCancel = !!permissions.outDutyApplicationsSelfCancel
+      base.outDutyApplicationsAllCancel = !!permissions.outDutyApplicationsAllCancel
+    } else if (section === "approver") {
+      base.outDutyApplicationApprover = !!permissions.outDutyApplicationApprover
+      base.outDutyApplicationsCancel = !!permissions.outDutyApplicationsCancel
+      base.outDutyApplicationsApprove = !!permissions.outDutyApplicationsApprove
+      base.outDutyApplicationsReject = !!permissions.outDutyApplicationsReject
+    }
+
+    return base
+  }
+
+  const handleSectionSave = async (section: "applicationManagement" | "approver") => {
+    if (!onSave) return
+
+    setLoading(true)
+    try {
+      const payload = buildSectionPayload(section)
+      await onSave(payload)
+    } catch (error) {
+      console.error("Error saving out duty application permissions:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleSave = async () => {
+    setLoading(true)
+    try {
+      if (onSave) {
+        await onSave({ ...permissions })
+      }
+    } catch (error) {
+      console.error("Error saving out duty application permissions:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Custom Switch Toggle Component - blue
+  const SwitchToggle = ({ 
+    id, 
+    checked, 
+    onCheckedChange, 
+    disabled = false 
+  }: { 
+    id: string
+    checked: boolean
+    onCheckedChange: (checked: boolean) => void
+    disabled?: boolean
+  }) => {
+    return (
+      <button
+        type="button"
+        id={id}
+        disabled={disabled}
+        onClick={() => !disabled && onCheckedChange(!checked)}
+        className={`
+          relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 ease-in-out
+          focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
+          ${checked ? 'bg-blue-600' : 'bg-gray-200'}
+          ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+        `}
+        role="switch"
+        aria-checked={checked}
+        aria-labelledby={`${id}-label`}
+      >
+        <span
+          className={`
+            inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-200 ease-in-out
+            ${checked ? 'translate-x-4' : 'translate-x-0.5'}
+          `}
+        />
+      </button>
+    )
+  }
+
+  return (
+    <div className="w-full max-w-5xl mx-auto space-y-6">
+      {/* Sub-form 1: Out Duty Application Management */}
+      <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
+        <div className="px-6 pt-4 pb-3 border-b border-gray-100 flex items-center gap-3">
+          <div className="p-1.5 bg-gray-100 rounded-lg">
+            <Shield className="h-4 w-4 text-gray-600" />
+          </div>
+          <div>
+            <h2 className="text-sm font-semibold text-gray-900">Out Duty Application Management</h2>
+            <p className="text-[11px] text-gray-500 mt-0.5">
+              Configure who can apply for out duty applications
+            </p>
+          </div>
+        </div>
+        <div className="px-6 py-4 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex items-center justify-between">
+              <div className="flex-1 pr-4">
+                <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">
+                  Out Duty Applications Self
+                </div>
+                <Label className="text-sm font-normal text-gray-900">
+                  Allow applying for self
+                </Label>
+              </div>
+              <SwitchToggle
+                id="outDutychApplicationsSelf"
+                checked={!!permissions.outDutychApplicationsSelf}
+                onCheckedChange={(checked) =>
+                  handlePermissionChange("outDutychApplicationsSelf", checked)
+                }
+                disabled={isReadOnly}
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex-1 pr-4">
+                <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">
+                  Out Duty Applications All
+                </div>
+                <Label className="text-sm font-normal text-gray-900">
+                  Allow applying for all employees
+                </Label>
+              </div>
+              <SwitchToggle
+                id="outDutyApplicationsAll"
+                checked={!!permissions.outDutyApplicationsAll}
+                onCheckedChange={(checked) =>
+                  handlePermissionChange("outDutyApplicationsAll", checked)
+                }
+                disabled={isReadOnly}
+              />
+            </div>
+          </div>
+
+          {/* Cancel Application Permissions - Conditionally shown based on main toggle */}
+          {(permissions.outDutychApplicationsSelf || permissions.outDutyApplicationsAll) && (
+            <div className="pt-4 border-t border-gray-100">
+              <h3 className="text-xs font-medium text-gray-900 mb-3 tracking-wide">
+                Cancel Application Permissions
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {permissions.outDutychApplicationsSelf && (
+                  <label className="group relative flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={!!permissions.outDutyApplicationsSelfCancel}
+                      onChange={(e) =>
+                        handlePermissionChange("outDutyApplicationsSelfCancel", e.target.checked)
+                      }
+                      disabled={isReadOnly}
+                      className="h-4 w-4 border-gray-300 rounded cursor-pointer accent-blue-600 focus:ring-2 focus:ring-blue-600 focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50"
+                    />
+                    <span className="text-sm font-normal text-gray-900">
+                      Cancel Self Applications
+                    </span>
+                  </label>
+                )}
+
+                {permissions.outDutyApplicationsAll && (
+                  <label className="group relative flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={!!permissions.outDutyApplicationsAllCancel}
+                      onChange={(e) =>
+                        handlePermissionChange("outDutyApplicationsAllCancel", e.target.checked)
+                      }
+                      disabled={isReadOnly}
+                      className="h-4 w-4 border-gray-300 rounded cursor-pointer accent-blue-600 focus:ring-2 focus:ring-blue-600 focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50"
+                    />
+                    <span className="text-sm font-normal text-gray-900">
+                      Cancel All Applications
+                    </span>
+                  </label>
+                )}
+              </div>
+            </div>
+          )}
+
+          {!isReadOnly && onSave && (
+            <div className="flex justify-end mt-4">
+              <button
+                type="button"
+                onClick={() => handleSectionSave("applicationManagement")}
+                disabled={loading}
+                className="h-8 px-4 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? "Saving..." : "Save Application Management"}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Sub-form 2: Out Duty Application Approver */}
+      <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
+        <div className="px-6 pt-4 pb-3 border-b border-gray-100 flex items-center gap-3">
+          <div className="p-1.5 bg-gray-100 rounded-lg">
+            <Shield className="h-4 w-4 text-gray-600" />
+          </div>
+          <div>
+            <h2 className="text-sm font-semibold text-gray-900">Out Duty Application Approver</h2>
+            <p className="text-[11px] text-gray-500 mt-0.5">
+              Enable to allow approval/rejection/cancellation of applications
+            </p>
+          </div>
+        </div>
+        <div className="px-6 py-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex-1 pr-4">
+              <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">
+                Out Duty Application Approver
+              </div>
+              <Label className="text-sm font-normal text-gray-900">
+                Enable to allow approval/rejection/cancellation of applications
+              </Label>
+            </div>
+            <SwitchToggle
+              id="outDutyApplicationApprover"
+              checked={!!permissions.outDutyApplicationApprover}
+              onCheckedChange={(checked) =>
+                handlePermissionChange("outDutyApplicationApprover", checked)
+              }
+              disabled={isReadOnly}
+            />
+          </div>
+
+          {/* Actions - Only shown when approver is enabled */}
+          {permissions.outDutyApplicationApprover && (
+            <div className="pt-4 border-t border-gray-100">
+              <h3 className="text-xs font-medium text-gray-900 mb-3 tracking-wide">
+                Out Duty Application Actions
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <label className="group relative flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={!!permissions.outDutyApplicationsCancel}
+                    onChange={(e) =>
+                      handlePermissionChange("outDutyApplicationsCancel", e.target.checked)
+                    }
+                    disabled={isReadOnly}
+                    className="h-4 w-4 border-gray-300 rounded cursor-pointer accent-blue-600 focus:ring-2 focus:ring-blue-600 focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50"
+                  />
+                  <span className="text-sm font-normal text-gray-900">
+                    Cancel Applications
+                  </span>
+                </label>
+
+                <label className="group relative flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={!!permissions.outDutyApplicationsApprove}
+                    onChange={(e) =>
+                      handlePermissionChange("outDutyApplicationsApprove", e.target.checked)
+                    }
+                    disabled={isReadOnly}
+                    className="h-4 w-4 border-gray-300 rounded cursor-pointer accent-blue-600 focus:ring-2 focus:ring-blue-600 focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50"
+                  />
+                  <span className="text-sm font-normal text-gray-900">
+                    Approve Applications
+                  </span>
+                </label>
+
+                <label className="group relative flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={!!permissions.outDutyApplicationsReject}
+                    onChange={(e) =>
+                      handlePermissionChange("outDutyApplicationsReject", e.target.checked)
+                    }
+                    disabled={isReadOnly}
+                    className="h-4 w-4 border-gray-300 rounded cursor-pointer accent-blue-600 focus:ring-2 focus:ring-blue-600 focus:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50"
+                  />
+                  <span className="text-sm font-normal text-gray-900">
+                    Reject Applications
+                  </span>
+                </label>
+              </div>
+            </div>
+          )}
+
+          {!isReadOnly && onSave && (
+            <div className="flex justify-end pt-2">
+              <button
+                type="button"
+                onClick={() => handleSectionSave("approver")}
+                disabled={loading}
+                className="h-8 px-4 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? "Saving..." : "Save Approver"}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}

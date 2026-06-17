@@ -1,0 +1,1450 @@
+{
+    "personalInformation": {
+        "tabRequired": true,
+        "fields": {
+            "photo": {
+                "label": "PHOTO",
+                "required": false,
+                "visible": true
+            },
+            "employeeID": {
+                "label": "EMPLOYEE ID",
+                "required": true,
+                "visible": true
+            },
+            "firstName": {
+                "label": "FIRST NAME",
+                "required": true,
+                "visible": true
+            },
+            "middleName": {
+                "label": "MIDDLE NAME",
+                "required": false,
+                "visible": true
+            },
+            "lastName": {
+                "label": "LAST NAME",
+                "required": false,
+                "visible": true
+            },
+            "fatherHusbandName": {
+                "label": "FATHER / HUSBAND NAME",
+                "required": false,
+                "visible": true
+            },
+            "gender": {
+                "label": "GENDER",
+                "required": true,
+                "visible": true
+            },
+            "birthDate": {
+                "label": "BIRTH DATE",
+                "required": false,
+                "visible": true
+            },
+            "bloodGroup": {
+                "label": "BLOOD GROUP",
+                "required": false,
+                "visible": true
+            },
+            "nationality": {
+                "label": "NATIONALITY",
+                "required": true,
+                "visible": true
+            },
+            "maritalStatus": {
+                "label": "MARITAL STATUS",
+                "required": false,
+                "visible": true
+            },
+            "caste": {
+                "label": "CASTE",
+                "required": false,
+                "visible": true
+            },
+            "identificationMark": {
+                "label": "IDENTIFICATION MARK",
+                "required": true,
+                "visible": true
+            }
+        }
+    },
+    "contactEmergency": {
+        "tabRequired": true,
+        "fields": {
+            "emailID": {
+                "fields": {
+                    "primaryEmailID": {
+                        "label": "PRIMARY EMAIL ID",
+                        "required": false,
+                        "visible": true
+                    },
+                    "secondaryEmailID": {
+                        "label": "SECONDARY EMAIL ID",
+                        "required": false,
+                        "visible": true
+                    }
+                }
+            },
+            "contactNumber": {
+                "fields": {
+                    "primaryContactNo": {
+                        "label": "PRIMARY CONTACT NUMBER",
+                        "required": true,
+                        "visible": true
+                    },
+                    "secondarContactNumber": {
+                        "label": "SECONDARY CONTACT NUMBER",
+                        "required": false,
+                        "visible": true
+                    },
+                    "emergencyContactPerson1": {
+                        "label": "EMERGENCY CONTACT PERSON 1",
+                        "required": false,
+                        "visible": true
+                    },
+                    "emergencyContactNo1": {
+                        "label": "EMERGENCY CONTACT NUMBER 1",
+                        "required": false,
+                        "visible": true
+                    },
+                    "emergencyContactPerson2": {
+                        "label": "EMERGENCY CONTACT PERSON 2",
+                        "required": false,
+                        "visible": true
+                    },
+                    "emergencyContactNo2": {
+                        "label": "EMERGENCY CONTACT NUMBER 2",
+                        "required": false,
+                        "visible": true
+                    }
+                }
+            },
+            "address": {
+                "permanentAddress": {
+                    "fields": {
+                        "addressLine1": {
+                            "label": "ADDRESS LINE 1",
+                            "required": true,
+                            "visible": true
+                        },
+                        "addressLine2": {
+                            "label": "ADDRESS LINE 2",
+                            "required": false,
+                            "visible": true
+                        },
+                        "country": {
+                            "label": "COUNTRY",
+                            "required": true,
+                            "visible": true
+                        },
+                        "state": {
+                            "label": "STATE",
+                            "required": true,
+                            "visible": true
+                        },
+                        "city": {
+                            "label": "CITY",
+                            "required": true,
+                            "visible": true
+                        },
+                        "pinCode": {
+                            "label": "PIN CODE",
+                            "required": false,
+                            "visible": true
+                        },
+                        "taluka": {
+                            "label": "TALUKA",
+                            "required": false,
+                            "visible": true
+                        },
+                        "isVerified": {
+                            "label": "IS VERIFIED",
+                            "required": false,
+                            "visible": true
+                        }
+                    }
+                },
+                "temporaryAddress": {
+                    "fields": {
+                        "addressLine1": {
+                            "label": "ADDRESS LINE 1",
+                            "required": false,
+                            "visible": true
+                        },
+                        "addressLine2": {
+                            "label": "ADDRESS LINE 2",
+                            "required": false,
+                            "visible": true
+                        },
+                        "country": {
+                            "label": "COUNTRY",
+                            "required": false,
+                            "visible": true
+                        },
+                        "state": {
+                            "label": "STATE",
+                            "required": false,
+                            "visible": true
+                        },
+                        "city": {
+                            "label": "CITY",
+                            "required": false,
+                            "visible": true
+                        },
+                        "pinCode": {
+                            "label": "PIN CODE",
+                            "required": false,
+                            "visible": true
+                        },
+                        "taluka": {
+                            "label": "TALUKA",
+                            "required": false,
+                            "visible": true
+                        },
+                        "isVerified": {
+                            "label": "IS VERIFIED",
+                            "required": false,
+                            "visible": true
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "employmentDetails": {
+        "tabRequired": true,
+        "fields": {
+            "dateOfJoining": {
+                "label": "DATE OF JOINING",
+                "required": false,
+                "visible": true
+            },
+            "contractFrom": {
+                "label": "CONTRACT FROM",
+                "required": true,
+                "visible": true
+            },
+            "contractTo": {
+                "label": "CONTRACT TO",
+                "required": true,
+                "visible": true
+            },
+            "contractPeriod": {
+                "label": "CONTRACT PERIOD",
+                "required": true,
+                "visible": true
+            },
+            "paymentMode": {
+                "label": "PAYMENT MODE",
+                "required": true,
+                "visible": true
+            },
+            "manager": {
+                "label": "MANAGER",
+                "required": false,
+                "visible": true
+            },
+            "superviser": {
+                "label": "SUPERVISER",
+                "required": false,
+                "visible": true
+            },
+            "backgroundVerificationRemark": {
+                "label": "BACKGROUND VERIFICATION REMARK",
+                "required": false,
+                "visible": true
+            },
+            "rejoin": {
+                "fields": {
+                    "isRejoining": {
+                        "label": "IS REJOINING",
+                        "required": true,
+                        "visible": true
+                    },
+                    "oldEmployeeCode": {
+                        "label": "OLD EMPLOYEE CODE",
+                        "required": false,
+                        "visible": true
+                    }
+                }
+            },
+            "workSkill": {
+                "fields": {
+                    "workSkillCode": {
+                        "label": "WORK SKILL CODE",
+                        "required": true,
+                        "visible": true
+                    },
+                    "workSkillTitle": {
+                        "label": "WORK SKILL TITLE",
+                        "required": true,
+                        "visible": true
+                    }
+                }
+            },
+            "deployment": {
+                "subsidiary": {
+                    "label": "SUBSIDIARY",
+                    "visible": true,
+                    "fields": {
+                        "subsidiaryCode": {
+                            "label": "SUBSIDIARY CODE",
+                            "required": true,
+                            "visible": true
+                        },
+                        "subsidiaryName": {
+                            "label": "SUBSIDIARY NAME",
+                            "required": true,
+                            "visible": true
+                        }
+                    }
+                },
+                "division": {
+                    "fields": {
+                        "divisionCode": {
+                            "label": "DIVISION CODE",
+                            "required": true,
+                            "visible": true
+                        },
+                        "divisionName": {
+                            "label": "DIVISION NAME",
+                            "required": true,
+                            "visible": true
+                        }
+                    }
+                },
+                "department": {
+                    "fields": {
+                        "departmentCode": {
+                            "label": "DEPARTMENT CODE",
+                            "required": true,
+                            "visible": true
+                        },
+                        "departmentName": {
+                            "label": "DEPARTMENT NAME",
+                            "required": true,
+                            "visible": true
+                        }
+                    }
+                },
+                "subDepartment": {
+                    "fields": {
+                        "subDepartmentCode": {
+                            "label": "SUB DEPARTMENT CODE",
+                            "required": true,
+                            "visible": true
+                        },
+                        "subDepartmentName": {
+                            "label": "SUB DEPARTMENT NAME",
+                            "required": true,
+                            "visible": true
+                        }
+                    }
+                },
+                "section": {
+                    "fields": {
+                        "sectionCode": {
+                            "label": "SECTION CODE",
+                            "required": true,
+                            "visible": true
+                        },
+                        "sectionName": {
+                            "label": "SECTION NAME",
+                            "required": true,
+                            "visible": true
+                        }
+                    }
+                },
+                "employeeCategory": {
+                    "fields": {
+                        "employeeCategoryCode": {
+                            "label": "EMPLOYEE CATEGORY CODE",
+                            "required": true,
+                            "visible": true
+                        },
+                        "employeeCategoryName": {
+                            "label": "EMPLOYEE CATEGORY NAME",
+                            "required": false,
+                            "visible": true
+                        }
+                    }
+                },
+                "grade": {
+                    "fields": {
+                        "gradeCode": {
+                            "label": "GRADE CODE",
+                            "required": false,
+                            "visible": true
+                        },
+                        "gradeName": {
+                            "label": "GRADE NAME",
+                            "required": false,
+                            "visible": true
+                        }
+                    }
+                },
+                "designation": {
+                    "fields": {
+                        "designationCode": {
+                            "label": "DESIGNATION CODE",
+                            "required": false,
+                            "visible": true
+                        },
+                        "designationName": {
+                            "label": "DESIGNATION NAME",
+                            "required": false,
+                            "visible": true
+                        }
+                    }
+                },
+                "location": {
+                    "fields": {
+                        "locationCode": {
+                            "label": "LOCATION CODE",
+                            "required": true,
+                            "visible": true
+                        },
+                        "locationName": {
+                            "label": "LOCATION NAME",
+                            "required": true,
+                            "visible": true
+                        },
+                        "countryCode": {
+                            "label": "COUNTRY CODE",
+                            "required": false,
+                            "visible": true
+                        },
+                        "stateCode": {
+                            "label": "STATE CODE",
+                            "required": false,
+                            "visible": true
+                        }
+                    }
+                },
+                "skillLevel": {
+                    "fields": {
+                        "skilledLevelTitle": {
+                            "label": "SKILL LEVEL TITLE",
+                            "required": false,
+                            "visible": true
+                        },
+                        "skilledLevelDescription": {
+                            "label": "SKILL LEVEL DESCRIPTION",
+                            "required": false,
+                            "visible": true
+                        }
+                    }
+                },
+                "contractor": {
+                    "fields": {
+                        "contractorCode": {
+                            "label": "CONTRACTOR CODE",
+                            "required": true,
+                            "visible": true
+                        },
+                        "contractorName": {
+                            "label": "CONTRACTOR NAME",
+                            "required": true,
+                            "visible": true
+                        }
+                    }
+                },
+                "areas": {
+                    "label": "AREAS",
+                    "required": false,
+                    "visible": true
+                }
+            },
+            "natureOfWork": {
+                "fields": {
+                    "natureOfWorkCode": {
+                        "label": "NATURE OF WORK CODE",
+                        "required": true,
+                        "visible": true
+                    },
+                    "natureOfWorkTitle": {
+                        "label": "NATURE OF WORK TITLE",
+                        "required": true,
+                        "visible": true
+                    }
+                }
+            }
+        }
+    },
+    "busDetails": {
+        "tabRequired": false,
+        "busDetail": {
+            "fields": {
+                "busNumber": {
+                    "label": "BUS NUMBER",
+                    "required": false,
+                    "visible": true
+                },
+                "busRegistrationNumber": {
+                    "label": "BUS REGISTRATION NUMBER",
+                    "required": false,
+                    "visible": true
+                },
+                "route": {
+                    "label": "ROUTE",
+                    "required": false,
+                    "visible": true
+                }
+            }
+        }
+    },
+    "bankDetails": {
+        "label": "BANK DETAILS",
+        "tabRequired": true,
+        "visible": true,
+        "fields": {
+            "aadharNumber": {
+                "label": "AADHAR NUMBER",
+                "required": true,
+                "visible": true
+            },
+            "esiNumber": {
+                "label": "ESI NUMBER",
+                "required": false,
+                "visible": true
+            },
+            "uanNumber": {
+                "label": "UAN NUMBER",
+                "required": false,
+                "visible": true
+            },
+            "pfNumber": {
+                "label": "PF NUMBER",
+                "required": false,
+                "visible": true
+            },
+            "bankDetails": {
+                "fields": {
+                    "bankName": {
+                        "label": "BANK NAME",
+                        "required": true,
+                        "visible": true
+                    },
+                    "ifscCode": {
+                        "label": "IFSC CODE",
+                        "required": true,
+                        "visible": true
+                    },
+                    "branchName": {
+                        "label": "BRANCH NAME",
+                        "required": true,
+                        "visible": true
+                    },
+                    "accountNumber": {
+                        "label": "ACCOUNT NUMBER",
+                        "required": true,
+                        "visible": true
+                    }
+                }
+            }
+        }
+    },
+    "documentsVerification": {
+        "label": "DOCUMENTS VERIFICATION",
+        "tabRequired": false,
+        "visible": true,
+        "fields": {
+            "insuranceNumber": {
+                "label": "INSURANCE NUMBER",
+                "required": false,
+                "visible": true
+            },
+            "mediclaimPolicyNumber": {
+                "label": "MEDICLAIM POLICY NUMBER",
+                "required": false,
+                "visible": true
+            },
+            "accidentPolicyNumber": {
+                "label": "ACCIDENT POLICY NUMBER",
+                "required": false,
+                "visible": true
+            },
+            "passport": {
+                "fields": {
+                    "passportNumber": {
+                        "label": "PASSPORT NUMBER",
+                        "required": false,
+                        "visible": true
+                    },
+                    "passportExpiryDate": {
+                        "label": "PASSPORT EXPIRY DATE",
+                        "required": false,
+                        "visible": true
+                    },
+                    "passportPath": {
+                        "label": "PASSPORT DOCUMENT",
+                        "required": false,
+                        "visible": true
+                    }
+                }
+            },
+            "workPermit": {
+                "fields": {
+                    "workpermitNumber": {
+                        "label": "WORK PERMIT NUMBER",
+                        "required": false,
+                        "visible": true
+                    },
+                    "workpermitExpiryDate": {
+                        "label": "WORK PERMIT EXPIRY DATE",
+                        "required": false,
+                        "visible": true
+                    },
+                    "workPermitPath": {
+                        "label": "WORK PERMIT DOCUMENT",
+                        "required": false,
+                        "visible": true
+                    }
+                }
+            },
+            "labourCard": {
+                "fields": {
+                    "labourCardNumber": {
+                        "label": "LABOUR CARD NUMBER",
+                        "required": false,
+                        "visible": true
+                    },
+                    "labourCardExpiryDate": {
+                        "label": "LABOUR CARD EXPIRY DATE",
+                        "required": false,
+                        "visible": true
+                    },
+                    "labourCardPath": {
+                        "label": "LABOUR CARD DOCUMENT",
+                        "required": false,
+                        "visible": true
+                    }
+                }
+            }
+        }
+    },
+    "uploadedDocuments": {
+        "label": "UPLOADED DOCUMENTS",
+        "tabRequired": false,
+        "visible": true,
+        "meta": {
+            "minItems": 0
+        },
+        "fields": {
+            "documentCategory": {
+                "fields": {
+                    "documentCategoryCode": {
+                        "label": "DOCUMENT CATEGORY CODE",
+                        "required": false,
+                        "visible": true
+                    },
+                    "documentCategoryTitle": {
+                        "label": "DOCUMENT CATEGORY TITLE",
+                        "required": false,
+                        "visible": true
+                    }
+                }
+            },
+            "documentType": {
+                "fields": {
+                    "documentTypeCode": {
+                        "label": "DOCUMENT TYPE CODE",
+                        "required": false,
+                        "visible": true
+                    },
+                    "documentTypeTitle": {
+                        "label": "DOCUMENT TYPE TITLE",
+                        "required": false,
+                        "visible": true
+                    }
+                }
+            },
+            "documentPath": {
+                "label": "DOCUMENT FILE",
+                "required": false,
+                "visible": true
+            },
+            "identificationNumber": {
+                "label": "IDENTIFICATION NUMBER",
+                "required": true,
+                "visible": true
+            }
+        }
+    },
+    "familyMembers": {
+        "tabRequired": false,
+        "meta": {
+            "minItems": 0
+        },
+        "fields": {
+            "memberName": {
+                "label": "MEMBER NAME",
+                "required": true,
+                "visible": true
+            },
+            "relation": {
+                "label": "RELATION",
+                "required": true,
+                "visible": true
+            },
+            "gender": {
+                "label": "GENDER",
+                "required": false,
+                "visible": true
+            },
+            "birthDate": {
+                "label": "BIRTH DATE",
+                "required": false,
+                "visible": true
+            },
+            "remark": {
+                "label": "REMARK",
+                "required": false,
+                "visible": true
+            },
+            "isDependent": {
+                "label": "IS DEPENDENT",
+                "required": true,
+                "visible": true
+            },
+            "aadharCard": {
+                "fields": {
+                    "aadharCardNumber": {
+                        "label": "AADHAR CARD NUMBER",
+                        "required": true,
+                        "visible": true
+                    },
+                    "aadharCardPath": {
+                        "label": "AADHAR CARD DOCUMENT",
+                        "required": false,
+                        "visible": true
+                    }
+                }
+            },
+            "electionCard": {
+                "fields": {
+                    "electionCardNumber": {
+                        "label": "ELECTION CARD NUMBER",
+                        "required": false,
+                        "visible": true
+                    },
+                    "electionCardPath": {
+                        "label": "ELECTION CARD DOCUMENT",
+                        "required": false,
+                        "visible": true
+                    }
+                }
+            },
+            "panCard": {
+                "fields": {
+                    "panCardNumber": {
+                        "label": "PAN CARD NUMBER",
+                        "required": false,
+                        "visible": true
+                    },
+                    "panCardPath": {
+                        "label": "PAN CARD DOCUMENT",
+                        "required": false,
+                        "visible": true
+                    }
+                }
+            }
+        }
+    },
+    "gratuityNominees": {
+        "tabRequired": false,
+        "meta": {
+            "minItems": 0
+        },
+        "fields": {
+            "memberName": {
+                "label": "MEMBER NAME",
+                "required": true,
+                "visible": true
+            },
+            "relation": {
+                "label": "RELATION",
+                "required": true,
+                "visible": true
+            },
+            "birthDate": {
+                "label": "BIRTH DATE",
+                "required": false,
+                "visible": true
+            },
+            "percentage": {
+                "label": "NOMINATION PERCENTAGE",
+                "required": false,
+                "visible": true
+            }
+        }
+    },
+    "pfNominees": {
+        "tabRequired": false,
+        "meta": {
+            "minItems": 0
+        },
+        "fields": {
+            "memberName": {
+                "label": "MEMBER NAME",
+                "required": true,
+                "visible": true
+            },
+            "relation": {
+                "label": "RELATION",
+                "required": true,
+                "visible": true
+            },
+            "birthDate": {
+                "label": "BIRTH DATE",
+                "required": false,
+                "visible": true
+            },
+            "percentage": {
+                "label": "NOMINATION PERCENTAGE",
+                "required": false,
+                "visible": true
+            }
+        }
+    },
+    "childrenAdmissions": {
+        "tabRequired": false,
+        "meta": {
+            "minItems": 0
+        },
+        "fields": {
+            "name": {
+                "label": "NAME",
+                "required": true,
+                "visible": true
+            },
+            "gender": {
+                "label": "GENDER",
+                "required": true,
+                "visible": true
+            },
+            "dateOfBirth": {
+                "label": "DATE OF BIRTH",
+                "required": true,
+                "visible": true
+            },
+            "dateOfAdmission": {
+                "label": "DATE OF ADMISSION",
+                "required": false,
+                "visible": true
+            },
+            "nameOfSchool": {
+                "label": "NAME OF SCHOOL",
+                "required": false,
+                "visible": true
+            },
+            "schoolAddress": {
+                "label": "SCHOOL ADDRESS",
+                "required": false,
+                "visible": true
+            }
+        }
+    },
+    "educations": {
+        "tabRequired": false,
+        "meta": {
+            "minItems": 0
+        },
+        "fields": {
+            "educationTitle": {
+                "label": "EDUCATION TITLE",
+                "required": false,
+                "visible": true
+            },
+            "courseTitle": {
+                "label": "COURSE TITLE",
+                "required": false,
+                "visible": true
+            },
+            "stream": {
+                "label": "STREAM",
+                "required": false,
+                "visible": true
+            },
+            "college": {
+                "label": "COLLEGE",
+                "required": false,
+                "visible": true
+            },
+            "yearOfPassing": {
+                "label": "YEAR OF PASSING",
+                "required": false,
+                "visible": true
+            },
+            "monthOfPassing": {
+                "label": "MONTH OF PASSING",
+                "required": false,
+                "visible": true
+            },
+            "percentage": {
+                "label": "PERCENTAGE",
+                "required": false,
+                "visible": true
+            },
+            "isVerified": {
+                "label": "IS VERIFIED",
+                "required": false,
+                "visible": true
+            }
+        }
+    },
+    "experiences": {
+        "tabRequired": false,
+        "meta": {
+            "minItems": 0
+        },
+        "fields": {
+            "companyName": {
+                "label": "COMPANY NAME",
+                "required": false,
+                "visible": true
+            },
+            "fromDate": {
+                "label": "FROM DATE",
+                "required": false,
+                "visible": true
+            },
+            "toDate": {
+                "label": "TO DATE",
+                "required": false,
+                "visible": true
+            },
+            "designation": {
+                "label": "DESIGNATION",
+                "required": false,
+                "visible": true
+            },
+            "filePath": {
+                "label": "DOCUMENT FILE",
+                "required": false,
+                "visible": true
+            }
+        }
+    },
+    "assetAllocations": {
+        "tabRequired": false,
+        "meta": {
+            "minItems": 0
+        },
+        "fields": {
+            "issueDate": {
+                "label": "ISSUE DATE",
+                "required": false,
+                "visible": true
+            },
+            "returnDate": {
+                "label": "RETURN DATE",
+                "required": false,
+                "visible": true
+            },
+            "asset": {
+                "fields": {
+                    "assetCode": {
+                        "label": "ASSET CODE",
+                        "required": true,
+                        "visible": true
+                    },
+                    "assetName": {
+                        "label": "ASSET NAME",
+                        "required": true,
+                        "visible": true
+                    }
+                },
+                "assetType": {
+                    "fields": {
+                        "assetTypeCode": {
+                            "label": "ASSET TYPE CODE",
+                            "required": false,
+                            "visible": true
+                        },
+                        "assetTypeTitle": {
+                            "label": "ASSET TYPE TITLE",
+                            "required": false,
+                            "visible": true
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "wcPolicies": {
+        "tabRequired": false,
+        "meta": {
+            "minItems": 0
+        },
+        "fields": {
+            "WCPolicyNumber": {
+                "label": "WC POLICY NUMBER",
+                "required": true,
+                "visible": true
+            },
+            "policyNumber": {
+                "label": "POLICY NUMBER",
+                "required": false,
+                "visible": true
+            },
+            "policyCompanyName": {
+                "label": "POLICY COMPANY NAME",
+                "required": false,
+                "visible": true
+            },
+            "policyStartDate": {
+                "label": "POLICY START DATE",
+                "required": false,
+                "visible": true
+            },
+            "policyExpiryDate": {
+                "label": "POLICY EXPIRY DATE",
+                "required": false,
+                "visible": true
+            },
+            "maximumWorkmen": {
+                "label": "MAXIMUM WORKMEN",
+                "required": false,
+                "visible": true
+            },
+            "isActive": {
+                "label": "IS ACTIVE",
+                "required": false,
+                "visible": true
+            }
+        }
+    },
+    "workOrders": {
+        "tabRequired": true,
+        "meta": {
+            "minItems": 1
+        },
+        "fields": {
+            "WCPolicyNumber": {
+                "label": "WC POLICY NUMBER",
+                "required": true,
+                "visible": true
+            },
+            "policyNumber": {
+                "label": "POLICY NUMBER",
+                "required": false,
+                "visible": true
+            },
+            "policyCompanyName": {
+                "label": "POLICY COMPANY NAME",
+                "required": false,
+                "visible": true
+            },
+            "policyStartDate": {
+                "label": "POLICY START DATE",
+                "required": false,
+                "visible": true
+            },
+            "policyExpiryDate": {
+                "label": "POLICY EXPIRY DATE",
+                "required": false,
+                "visible": true
+            },
+            "maximumWorkmen": {
+                "label": "MAXIMUM WORKMEN",
+                "required": false,
+                "visible": true
+            },
+            "isActive": {
+                "label": "IS ACTIVE",
+                "required": false,
+                "visible": true
+            }
+        }
+    },
+    "medicalCheckups": {
+        "tabRequired": false,
+        "meta": {
+            "minItems": 0
+        },
+        "fields": {
+            "checkupDate": {
+                "label": "CHECKUP DATE",
+                "required": true,
+                "visible": true
+            },
+            "nextCheckupDate": {
+                "label": "NEXT CHECKUP DATE",
+                "required": true,
+                "visible": true
+            },
+            "description": {
+                "label": "DESCRIPTION",
+                "required": true,
+                "visible": true
+            },
+            "documentPath": {
+                "label": "DOCUMENT FILE",
+                "required": false,
+                "visible": true
+            }
+        }
+    },
+    "medicalSafety": {
+        "tabRequired": false,
+        "fields": {
+            "vaccine1": {
+                "label": "VACCINE 1",
+                "required": true,
+                "visible": true
+            },
+            "vaccine2": {
+                "label": "VACCINE 2",
+                "required": true,
+                "visible": true
+            },
+            "vaccine3": {
+                "label": "VACCINE 3",
+                "required": true,
+                "visible": true
+            },
+            "vaccine1Certificate": {
+                "label": "VACCINE 1 CERTIFICATE",
+                "required": false,
+                "visible": true
+            },
+            "vaccine2Certificate": {
+                "label": "VACCINE 2 CERTIFICATE",
+                "required": false,
+                "visible": true
+            },
+            "vaccine3Certificate": {
+                "label": "VACCINE 3 CERTIFICATE",
+                "required": false,
+                "visible": true
+            }
+        }
+    },
+    "accidentRegisters": {
+        "tabRequired": false,
+        "meta": {
+            "minItems": 0
+        },
+        "fields": {
+            "dateOfAccident": {
+                "label": "DATE OF ACCIDENT",
+                "required": true,
+                "visible": true
+            },
+            "dateOfReport": {
+                "label": "DATE OF REPORT",
+                "required": true,
+                "visible": true
+            },
+            "accidentDescription": {
+                "label": "ACCIDENT DESCRIPTION",
+                "required": true,
+                "visible": true
+            },
+            "dateOfReturn": {
+                "label": "DATE OF RETURN",
+                "required": true,
+                "visible": true
+            }
+        }
+    },
+    "policeVerification": {
+        "tabRequired": true,
+        "meta": {
+            "minItems": 1
+        },
+        "fields": {
+            "verificationDate": {
+                "label": "VERIFICATION DATE",
+                "required": true,
+                "visible": true
+            },
+            "nextVerificationDate": {
+                "label": "NEXT VERIFICATION DATE",
+                "required": true,
+                "visible": true
+            },
+            "description": {
+                "label": "DESCRIPTION",
+                "required": true,
+                "visible": true
+            },
+            "policeStationDetail": {
+                "label": "POLICE STATION DETAIL",
+                "required": true,
+                "visible": true
+            },
+            "policeStationPinCode": {
+                "label": "POLICE STATION PIN CODE",
+                "required": false,
+                "visible": true
+            },
+            "documentPath": {
+                "label": "DOCUMENT FILE",
+                "required": false,
+                "visible": true
+            },
+            "isActive": {
+                "label": "IS ACTIVE",
+                "required": true,
+                "visible": true
+            }
+        }
+    },
+    "backgroundVerification": {
+        "tabRequired": true,
+        "fields": {
+            "iframeUrl": {
+                "label": "BACKGROUND VERIFICATION URL",
+                "required": false,
+                "visible": true
+            }
+        }
+    },
+    "defaultWeekOff": {
+        "tabRequired": false,
+        "meta": {
+            "minItems": 0
+        },
+        "fields": {
+            "from": {
+                "label": "FROM DATE",
+                "required": true,
+                "visible": true
+            },
+            "to": {
+                "label": "TO DATE",
+                "required": true,
+                "visible": true
+            },
+            "isActive": {
+                "label": "IS ACTIVE",
+                "required": true,
+                "visible": true
+            }
+        }
+    },
+    "actionsStatus": {
+        "tabRequired": true,
+        "fields": {
+            "remark": {
+                "label": "REMARK",
+                "required": false,
+                "visible": true
+            },
+            "defaultShiftGroupCode": {
+                "label": "DEFAULT SHIFT GROUP CODE",
+                "required": true,
+                "visible": true
+            },
+            "resignationDate": {
+                "label": "RESIGNATION DATE",
+                "required": false,
+                "visible": true
+            },
+            "relievingDate": {
+                "label": "RELIEVING DATE",
+                "required": false,
+                "visible": true
+            },
+            "dateOfLeaving": {
+                "label": "DATE OF LEAVING",
+                "required": false,
+                "visible": true
+            },
+            "status": {
+                "fields": {
+                    "currentStatus": {
+                        "label": "CURRENT STATUS",
+                        "required": true,
+                        "visible": true
+                    },
+                    "resignationDate": {
+                        "label": "RESIGNATION DATE",
+                        "required": false,
+                        "visible": true
+                    },
+                    "relievingDate": {
+                        "label": "RELIEVING DATE",
+                        "required": false,
+                        "visible": true
+                    },
+                    "dateOfLeaving": {
+                        "label": "DATE OF LEAVING",
+                        "required": false,
+                        "visible": true
+                    },
+                    "notToReHire": {
+                        "label": "NOT TO REHIRE",
+                        "required": true,
+                        "visible": true
+                    },
+                    "onNoticePeriod": {
+                        "label": "ON NOTICE PERIOD",
+                        "required": true,
+                        "visible": true
+                    }
+                }
+            }
+        }
+    },
+    "disciplinaryActions": {
+        "tabRequired": false,
+        "meta": {
+            "minItems": 0
+        },
+        "fields": {
+            "actionTakenOn": {
+                "label": "ACTION TAKEN ON",
+                "required": true,
+                "visible": true
+            },
+            "issueReportedOn": {
+                "label": "ISSUE REPORTED ON",
+                "required": true,
+                "visible": true
+            },
+            "issuedescription": {
+                "label": "ISSUE DESCRIPTION",
+                "required": true,
+                "visible": true
+            },
+            "actionDescription": {
+                "label": "ACTION DESCRIPTION",
+                "required": true,
+                "visible": true
+            },
+            "remark": {
+                "label": "REMARK",
+                "required": false,
+                "visible": true
+            },
+            "status": {
+                "label": "STATUS",
+                "required": true,
+                "visible": true
+            },
+            "documentPath": {
+                "label": "DOCUMENT FILE",
+                "required": false,
+                "visible": true
+            }
+        }
+    },
+    "bonuses": {
+        "tabRequired": false,
+        "meta": {
+            "minItems": 0
+        },
+        "fields": {
+            "date": {
+                "label": "DATE",
+                "required": true,
+                "visible": true
+            },
+            "month": {
+                "label": "MONTH",
+                "required": true,
+                "visible": true
+            },
+            "year": {
+                "label": "YEAR",
+                "required": true,
+                "visible": true
+            },
+            "amount": {
+                "label": "AMOUNT",
+                "required": true,
+                "visible": true
+            },
+            "bonusDescription": {
+                "label": "BONUS DESCRIPTION",
+                "required": true,
+                "visible": true
+            }
+        }
+    },
+    "penalties": {
+        "tabRequired": false,
+        "meta": {
+            "minItems": 0
+        },
+        "fields": {
+            "dateOfOffence": {
+                "label": "DATE OF OFFENCE",
+                "required": true,
+                "visible": true
+            },
+            "offenceDescription": {
+                "label": "OFFENCE DESCRIPTION",
+                "required": true,
+                "visible": true
+            },
+            "actionTaken": {
+                "label": "ACTION TAKEN",
+                "required": true,
+                "visible": true
+            },
+            "fineImposed": {
+                "label": "FINE IMPOSED",
+                "required": true,
+                "visible": true
+            },
+            "month": {
+                "label": "MONTH",
+                "required": true,
+                "visible": true
+            },
+            "isCauseShownAgainstFine": {
+                "label": "CAUSE SHOWN AGAINST FINE",
+                "required": true,
+                "visible": true
+            },
+            "witnessName": {
+                "label": "WITNESS NAME",
+                "required": false,
+                "visible": true
+            },
+            "fineRealisedDate": {
+                "label": "FINE REALISED DATE",
+                "required": false,
+                "visible": true
+            }
+        }
+    },
+    "advancePayments": {
+        "tabRequired": false,
+        "meta": {
+            "minItems": 0
+        },
+        "fields": {
+            "date": {
+                "label": "DATE",
+                "required": true,
+                "visible": true
+            },
+            "month": {
+                "label": "MONTH",
+                "required": true,
+                "visible": true
+            },
+            "year": {
+                "label": "YEAR",
+                "required": true,
+                "visible": true
+            },
+            "amount": {
+                "label": "AMOUNT",
+                "required": true,
+                "visible": true
+            },
+            "bonusDescription": {
+                "label": "BONUS DESCRIPTION",
+                "required": true,
+                "visible": true
+            }
+        }
+    }
+}

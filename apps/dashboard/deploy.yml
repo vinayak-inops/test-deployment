@@ -1,0 +1,49 @@
+# Dashboard App Deployment Configuration
+# This file contains deployment configurations for different environments
+
+# Environment configurations
+environments:
+  development:
+    port: 3004
+    base_path: "/dashboard"
+    api_endpoint: "http://localhost:3004/api"
+    graphql_endpoint: "http://173.65.7.58:8086/graphql"
+    
+  staging:
+    port: 3004
+    base_path: "/dashboard"
+    api_endpoint: "https://staging-api.example.com/api"
+    graphql_endpoint: "https://staging-graphql.example.com/graphql"
+    
+  production:
+    port: 3004
+    base_path: "/dashboard"
+    api_endpoint: "https://api.example.com/api"
+    graphql_endpoint: "https://graphql.example.com/graphql"
+
+# Docker configuration
+docker:
+  image_name: "dashboard-app"
+  tag: "latest"
+  port: 3004
+  
+# Build configuration
+build:
+  node_version: "18"
+  npm_version: "9"
+  build_command: "npm run build"
+  start_command: "npm run start"
+  
+# Health check configuration
+health_check:
+  endpoint: "/api/health"
+  interval: 30
+  timeout: 10
+  retries: 3
+  
+# Environment variables
+env_vars:
+  NODE_ENV: "production"
+  NEXT_TELEMETRY_DISABLED: "1"
+  PORT: "3004"
+

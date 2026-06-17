@@ -1,0 +1,344 @@
+name:  InOps Monorepo Build (Self Hosted)
+
+on:
+  push:
+    branches: [main, auto-excel-v1, deployment, localhostDevTest]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Docker image version (e.g., 1.0.0)'
+        required: true
+        type: string
+        default: '1.0.0'
+
+jobs:
+  build:
+    name: Build, Test, Push & Cleanup Docker Images
+    runs-on: self-hosted
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || github.ref == 'refs/heads/deployment' && 'deployment' || github.ref == 'refs/heads/auto-excel-v1' && 'test' || github.ref == 'refs/heads/localhostDevTest' && 'localhostDevTest' || 'test' }}
+
+    steps:
+      # 1️⃣ Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 🧹 Pre-clean disk space
+      - name: Clean disk space (pre-clean)
+        run: |
+          docker system prune -af || true
+          sudo rm -rf /opt/hostedtoolcache || true
+          sudo rm -rf /usr/share/dotnet || true
+          sudo rm -rf /usr/local/lib/android || true
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY" || true
+
+      # 2️⃣ Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.17.0
+          cache: 'npm'
+
+      # 3️⃣ Install dependencies for monorepo
+      - name: Install dependencies
+        run: |
+          npm install -g turbo@1.9.3
+          npm install --legacy-peer-deps
+
+      # 4️⃣ Clean Docker before builds
+      - name: Clean Docker before builds
+        run: docker system prune -af || true
+
+      # 5️⃣ Set version and branch name for image tags
+      - name: Set version and branch name for image tags
+        id: version
+        run: |
+          MAJOR=1
+          TODAY=$(date +'%y.%m.%d')
+
+          # Fetch tags
+          git fetch --tags
+
+          # Get latest tag matching v1.*
+          LAST_TAG=$(git tag -l "v${MAJOR}.*" --sort=-v:refname | head -n 1)
+
+          if [ -z "$LAST_TAG" ]; then
+            NEXT_NUMBER=1
+          else
+            # Extract last number after final dot
+            LAST_NUMBER=$(echo "$LAST_TAG" | awk -F. '{print $NF}')
+            NEXT_NUMBER=$((LAST_NUMBER + 1))
+          fi
+
+          VERSION="v${MAJOR}.${TODAY}.${NEXT_NUMBER}"
+
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "📦 Version: $VERSION"
+
+          # Branch name
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BRANCH_NAME="${{ github.head_ref }}"
+          else
+            BRANCH_NAME="${{ github.ref_name }}"
+          fi
+
+          BRANCH_NAME=$(echo "$BRANCH_NAME" \
+            | tr '[:upper:]' '[:lower:]' \
+            | sed 's/[^a-z0-9-]/-/g' \
+            | sed 's/--*/-/g' \
+            | sed 's/^-\|-$//g')
+
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          echo "🌿 Branch: $BRANCH_NAME"
+
+          IMAGE_TAG="${BRANCH_NAME}-${VERSION}"
+          echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "🏷️  Docker image tag: $IMAGE_TAG"
+
+      # 6️⃣ Login to Docker Hub
+      - name: Login to Docker Hub
+        if: github.event_name == 'push'
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+
+
+          
+      # ============================================================
+      # MAIN APP: Build → Push → Delete
+      # ============================================================
+      - name: Build Main Docker image
+        run: |
+          docker build \
+            --file apps/main/Dockerfile \
+            --build-arg NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}" \
+            --build-arg NEXTAUTH_URL="${{ vars.NEXTAUTH_URL }}" \
+            --build-arg NEXT_KEYCLOAK_CLIENT_SECRET="${{ secrets.NEXT_KEYCLOAK_CLIENT_SECRET }}" \
+            --build-arg NEXT_KEYCLOAK_CLIENT_ID="${{ secrets.NEXT_KEYCLOAK_CLIENT_ID }}" \
+            --build-arg NEXT_KEYCLOAK_ISSUER="${{ secrets.NEXT_KEYCLOAK_ISSUER }}" \
+            --build-arg NEXT_PUBLIC_API_BASE_URL="${{ vars.NEXT_PUBLIC_API_BASE_URL }}" \
+            --build-arg NEXT_PUBLIC_API_BASE_URL_KEYCLOCK="${{ vars.NEXT_PUBLIC_API_BASE_URL_KEYCLOCK }}" \
+            --build-arg NEXT_PUBLIC_MASTER_URL="${{ vars.NEXT_PUBLIC_MASTER_URL }}" \
+            --build-arg NEXT_PUBLIC_WORKFLOW_URL="${{ vars.NEXT_PUBLIC_WORKFLOW_URL }}" \
+            --build-arg NEXT_PUBLIC_REPORTS_URL="${{ vars.NEXT_PUBLIC_REPORTS_URL }}" \
+            --build-arg NEXT_PUBLIC_DASHBOARD_URL="${{ vars.NEXT_PUBLIC_DASHBOARD_URL }}" \
+            --build-arg NEXT_PUBLIC_LEAVE_URL="${{ vars.NEXT_PUBLIC_LEAVE_URL }}" \
+            --build-arg NEXT_PUBLIC_MUSTER_URL="${{ vars.NEXT_PUBLIC_MUSTER_URL }}" \
+            --build-arg NEXT_PUBLIC_WAGES_URL="${{ vars.NEXT_PUBLIC_WAGES_URL }}" \
+            --build-arg NEXT_PUBLIC_NEXTAUTH_URL="${{ vars.NEXT_PUBLIC_NEXTAUTH_URL }}" \
+            --build-arg NEXT_PUBLIC_OTAPPLICATION_URL="${{ vars.NEXT_PUBLIC_OTAPPLICATION_URL }}" \
+            --build-arg NEXT_PUBLIC_BGM_URL="${{ vars.NEXT_PUBLIC_BGM_URL }}" \
+            --build-arg NEXT_PUBLIC_AI_URL="${{ vars.NEXT_PUBLIC_AI_URL }}" \
+            --build-arg NEXT_PUBLIC_AIAPPLICATION_URL="${{ vars.NEXT_PUBLIC_AIAPPLICATION_URL }}" \
+            -t ${{ secrets.DOCKER_USERNAME }}/inops-main-app:testv1 .
+
+      - name: Push Main App Image
+        if: github.event_name == 'push'
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/inops-main-app:testv1
+
+      - name: Delete Main App Local Image
+        if: github.event_name == 'push'
+        run: docker rmi ${{ secrets.DOCKER_USERNAME }}/inops-main-app:testv1 || true
+  
+
+
+
+      # ============================================================
+      # MASTER: Build → Push → Delete (PORT 3001)
+      # ============================================================
+      - name: Build Master Docker image
+        run: |
+          docker build \
+            --file apps/master/Dockerfile \
+            --build-arg NEXT_PUBLIC_API_BASE_URL="${{ vars.NEXT_PUBLIC_API_BASE_URL }}" \
+            --build-arg NEXT_PUBLIC_MASTER_URL="${{ vars.NEXT_PUBLIC_MASTER_URL }}" \
+            --build-arg NEXT_PUBLIC_NEXTAUTH_URL="${{ vars.NEXT_PUBLIC_NEXTAUTH_URL }}" \
+            --build-arg NEXT_PUBLIC_ENCRYPTION_KEY="${{ vars.NEXT_PUBLIC_ENCRYPTION_KEY }}" \
+            -t ${{ secrets.DOCKER_USERNAME }}/inops-master-app:${{ steps.version.outputs.image_tag }} .
+
+      - name: Push Master Image
+        if: github.event_name == 'push'
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/inops-master-app:${{ steps.version.outputs.image_tag }}
+
+      - name: Delete Master Local Image
+        if: github.event_name == 'push'
+        run: docker rmi ${{ secrets.DOCKER_USERNAME }}/inops-master-app:${{ steps.version.outputs.image_tag }} || true
+
+
+           # ============================================================
+      # REPORTS: Build → Push → Delete
+      # ============================================================
+      - name: Build Reports Docker image
+        run: |
+          docker build \
+            --file apps/reports/Dockerfile \
+            --build-arg NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}" \
+            --build-arg NEXT_KEYCLOAK_CLIENT_SECRET="${{ secrets.NEXT_KEYCLOAK_CLIENT_SECRET }}" \
+            --build-arg NEXT_PUBLIC_API_BASE_URL="${{ vars.NEXT_PUBLIC_API_BASE_URL }}" \
+            --build-arg NEXT_PUBLIC_NEXTAUTH_URL="${{ vars.NEXT_PUBLIC_NEXTAUTH_URL }}" \
+            --build-arg NEXT_PUBLIC_ENCRYPTION_KEY="${{ vars.NEXT_PUBLIC_ENCRYPTION_KEY }}" \
+            -t ${{ secrets.DOCKER_USERNAME }}/inops-reports-app:${{ steps.version.outputs.image_tag }} .
+
+      - name: Push Reports Image
+        if: github.event_name == 'push'
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/inops-reports-app:${{ steps.version.outputs.image_tag }}
+
+      - name: Delete Reports Local Image
+        if: github.event_name == 'push'
+        run: docker rmi ${{ secrets.DOCKER_USERNAME }}/inops-reports-app:${{ steps.version.outputs.image_tag }} || true
+
+        
+
+# ============================================================
+      # DASHBOARD: Build → Push → Delete
+      # ============================================================
+      - name: Build Dashboard Docker image
+        run: |
+          docker build \
+            --file apps/dashboard/Dockerfile \
+            --build-arg NEXT_PUBLIC_API_BASE_URL="${{ vars.NEXT_PUBLIC_API_BASE_URL }}" \
+            --build-arg NEXT_PUBLIC_DASHBOARD_URL="${{ vars.NEXT_PUBLIC_DASHBOARD_URL }}" \
+            --build-arg NEXT_PUBLIC_NEXTAUTH_URL="${{ vars.NEXT_PUBLIC_NEXTAUTH_URL }}" \
+            -t ${{ secrets.DOCKER_USERNAME }}/inops-dashboard-app:${{ steps.version.outputs.image_tag }} .
+
+      - name: Push Dashboard Image
+        if: github.event_name == 'push'
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/inops-dashboard-app:${{ steps.version.outputs.image_tag }}
+
+      - name: Delete Dashboard Local Image
+        if: github.event_name == 'push'
+        run: docker rmi ${{ secrets.DOCKER_USERNAME }}/inops-dashboard-app:${{ steps.version.outputs.image_tag }} || true
+
+
+
+  
+          
+        
+      # ============================================================
+      # MUSTER: Build → Push → Delete (PORT 3006)
+      # ============================================================
+      - name: Build Muster Docker image
+        run: |
+          docker build \
+            --file apps/muster/Dockerfile \
+            --build-arg NEXT_PUBLIC_API_BASE_URL="${{ vars.NEXT_PUBLIC_API_BASE_URL }}" \
+            --build-arg NEXT_PUBLIC_MUSTER_URL="${{ vars.NEXT_PUBLIC_MUSTER_URL }}" \
+            --build-arg NEXT_PUBLIC_NEXTAUTH_URL="${{ vars.NEXT_PUBLIC_NEXTAUTH_URL }}" \
+            --build-arg NEXT_PUBLIC_ENCRYPTION_KEY="${{ vars.NEXT_PUBLIC_ENCRYPTION_KEY }}" \
+            -t ${{ secrets.DOCKER_USERNAME }}/inops-muster-app:${{ steps.version.outputs.image_tag }} .
+
+      - name: Push Muster Image
+        if: github.event_name == 'push'
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/inops-muster-app:${{ steps.version.outputs.image_tag }}
+
+      - name: Delete Muster Local Image
+        if: github.event_name == 'push'
+        run: docker rmi ${{ secrets.DOCKER_USERNAME }}/inops-muster-app:${{ steps.version.outputs.image_tag }} || true
+
+    
+      # ============================================================
+      # LEAVE: Build → Push → Delete
+      # ============================================================
+      - name: Build Leave Docker image
+        run: |
+          docker build \
+            --file apps/leave/Dockerfile \
+            --build-arg NEXT_PUBLIC_API_BASE_URL="${{ vars.NEXT_PUBLIC_API_BASE_URL }}" \
+            --build-arg NEXT_PUBLIC_LEAVE_URL="${{ vars.NEXT_PUBLIC_LEAVE_URL }}" \
+            --build-arg NEXT_PUBLIC_NEXTAUTH_URL="${{ vars.NEXT_PUBLIC_NEXTAUTH_URL }}" \
+            -t ${{ secrets.DOCKER_USERNAME }}/inops-leave-app:${{ steps.version.outputs.image_tag }} .
+
+      - name: Push Leave Image
+        if: github.event_name == 'push'
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/inops-leave-app:${{ steps.version.outputs.image_tag }}
+
+      - name: Delete Leave Local Image
+        if: github.event_name == 'push'
+        run: docker rmi ${{ secrets.DOCKER_USERNAME }}/inops-leave-app:${{ steps.version.outputs.image_tag }} || true
+
+      # ============================================================
+      # WAGE: Build → Push → Delete
+      # ============================================================
+      - name: Build Wages Docker image
+        run: |
+          docker build \
+            --file apps/wage/Dockerfile \
+            --build-arg NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}" \
+            --build-arg NEXT_KEYCLOAK_CLIENT_SECRET="${{ secrets.NEXT_KEYCLOAK_CLIENT_SECRET }}" \
+            --build-arg NEXT_PUBLIC_API_BASE_URL="${{ vars.NEXT_PUBLIC_API_BASE_URL }}" \
+            --build-arg NEXT_PUBLIC_APPLICATION_URL="${{ vars.NEXT_PUBLIC_APPLICATION_URL }}" \
+            --build-arg NEXT_PUBLIC_NEXTAUTH_URL="${{ vars.NEXT_PUBLIC_NEXTAUTH_URL }}" \
+            -t ${{ secrets.DOCKER_USERNAME }}/inops-wages-app:${{ steps.version.outputs.image_tag }} .
+
+      - name: Push Wages Image
+        if: github.event_name == 'push'
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/inops-wages-app:${{ steps.version.outputs.image_tag }}
+
+      - name: Delete Wages Local Image
+        if: github.event_name == 'push'
+        run: docker rmi ${{ secrets.DOCKER_USERNAME }}/inops-wages-app:${{ steps.version.outputs.image_tag }} || true
+
+      # ============================================================
+      # APPLICATION: Build → Push → Delete (PORT 3008)
+      # ============================================================
+      - name: Build Application Docker image
+        run: |
+          docker build \
+            --file apps/application/Dockerfile \
+            --build-arg NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}" \
+            --build-arg NEXT_KEYCLOAK_CLIENT_SECRET="${{ secrets.NEXT_KEYCLOAK_CLIENT_SECRET }}" \
+            --build-arg NEXT_PUBLIC_API_BASE_URL="${{ vars.NEXT_PUBLIC_API_BASE_URL }}" \
+            --build-arg NEXT_PUBLIC_APPLICATION_URL="${{ vars.NEXT_PUBLIC_APPLICATION_URL }}" \
+            --build-arg NEXT_PUBLIC_NEXTAUTH_URL="${{ vars.NEXT_PUBLIC_NEXTAUTH_URL }}" \
+            -t ${{ secrets.DOCKER_USERNAME }}/inops-application-app:${{ steps.version.outputs.image_tag }} .
+
+      - name: Push Application Image
+        if: github.event_name == 'push'
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/inops-application-app:${{ steps.version.outputs.image_tag }}
+
+      - name: Delete Application Local Image
+        if: github.event_name == 'push'
+        run: docker rmi ${{ secrets.DOCKER_USERNAME }}/inops-application-app:${{ steps.version.outputs.image_tag }} || true
+
+
+
+
+      
+          
+      # ============================================================
+      # Aiapplication: Build → Push → Delete (PORT 3001)
+      # ============================================================
+      - name: Build Aiapplication Docker image
+        run: |
+          docker build \
+            --file apps/aiapplication/Dockerfile \
+            --build-arg GEMINI_API_KEY="${{ secrets.GEMINI_API_KEY }}" \
+            --build-arg NEXT_PUBLIC_API_BASE_URL="${{ vars.NEXT_PUBLIC_API_BASE_URL }}" \
+            --build-arg NEXT_PUBLIC_AIAPPLICATION_URL="${{ vars.NEXT_PUBLIC_AIAPPLICATION_URL }}" \
+            --build-arg NEXT_PUBLIC_NEXTAUTH_URL="${{ vars.NEXT_PUBLIC_NEXTAUTH_URL }}" \
+            --build-arg NEXT_PUBLIC_ENCRYPTION_KEY="${{ vars.NEXT_PUBLIC_ENCRYPTION_KEY }}" \
+            -t ${{ secrets.DOCKER_USERNAME }}/inops-aiapplication-app:${{ steps.version.outputs.image_tag }} .
+
+      - name: Push Aiapplication Image
+        if: github.event_name == 'push'
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/inops-aiapplication-app:${{ steps.version.outputs.image_tag }}
+
+      - name: Delete Aiapplication Local Image
+        if: github.event_name == 'push'
+        run: docker rmi ${{ secrets.DOCKER_USERNAME }}/inops-aiapplication-app:${{ steps.version.outputs.image_tag }}
+
+
+
+      # ============================================================
+      # FINAL CLEANUP
+      # ============================================================
+      - name: Final Cleanup
+        if: always()
+        run: |
+          docker system prune -af || true
+          docker volume prune -f || true
+          docker builder prune -af || true

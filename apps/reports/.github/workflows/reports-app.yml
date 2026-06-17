@@ -1,0 +1,58 @@
+name: 🚀 Reports App CI/CD
+
+on:
+  workflow_call:
+    secrets:
+      NEXTAUTH_SECRET:
+        required: true
+      NEXT_KEYCLOAK_CLIENT_SECRET:
+        required: true
+      NEXT_PUBLIC_API_BASE_URL:
+        required: true
+      NEXT_PUBLIC_NEXTAUTH_URL:
+        required: true
+      NEXT_PUBLIC_ENCRYPTION_KEY:
+        required: true
+      DOCKER_USERNAME:
+        required: true
+      DOCKER_PASSWORD:
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.17.0
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm install -g turbo@1.9.3
+          npm install --legacy-peer-deps
+
+      - name: Build Reports App
+        run: turbo run build --filter=reports... --force
+        env:
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          NEXT_KEYCLOAK_CLIENT_SECRET: ${{ secrets.NEXT_KEYCLOAK_CLIENT_SECRET }}
+          NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
+          NEXT_PUBLIC_NEXTAUTH_URL: ${{ secrets.NEXT_PUBLIC_NEXTAUTH_URL }}
+          NEXT_PUBLIC_ENCRYPTION_KEY: ${{ secrets.NEXT_PUBLIC_ENCRYPTION_KEY }}
+
+      - name: Build & Push Docker Image
+        run: |
+          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          docker build \
+            --file apps/reports/Dockerfile \
+            --build-arg NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}" \
+            --build-arg NEXT_KEYCLOAK_CLIENT_SECRET="${{ secrets.NEXT_KEYCLOAK_CLIENT_SECRET }}" \
+            --build-arg NEXT_PUBLIC_API_BASE_URL="${{ secrets.NEXT_PUBLIC_API_BASE_URL }}" \
+            --build-arg NEXT_PUBLIC_NEXTAUTH_URL="${{ secrets.NEXT_PUBLIC_NEXTAUTH_URL }}" \
+            --build-arg NEXT_PUBLIC_ENCRYPTION_KEY="${{ secrets.NEXT_PUBLIC_ENCRYPTION_KEY }}" \
+            -t "$DOCKER_USERNAME/inops-reports-app:latest" .
+          docker push "$DOCKER_USERNAME/inops-reports-app:latest"

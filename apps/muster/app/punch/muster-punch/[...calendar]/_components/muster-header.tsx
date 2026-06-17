@@ -1,0 +1,37 @@
+import { MoreHorizontal, Settings } from "lucide-react";
+
+interface MusterHeaderProps {
+    title: string;
+    description: string;
+}
+
+function MusterHeader({ title, description }: MusterHeaderProps) {
+    return (
+        <div className="  border-b border-slate-200 px-8 py-4">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <h1 className="text-xl font-semibold text-slate-900">{title}</h1>
+              <p className="text-sm text-slate-500">{description}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-sm border border-slate-200 bg-white text-slate-800 hover:bg-slate-50"
+              >
+                <Settings className="h-4 w-4" />
+                Settings
+              </button>
+              <button
+                type="button"
+                className="inline-flex items-center justify-center h-9 w-9 rounded-md border border-slate-200 bg-white text-slate-800 hover:bg-slate-50"
+                aria-label="More options"
+              >
+                <MoreHorizontal className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+    )
+}
+
+export default MusterHeader;

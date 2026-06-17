@@ -1,0 +1,73 @@
+{
+  "remark": "New hire",
+  "status": {
+    "currentStatus": "Active",
+    "resignationDate": "2025-05-14",
+    "relievingDate": "2025-05-20",
+    "notToReHire": false
+  },
+  "auditTrail": {
+    "createdBy": "1",
+    "createdOn": "2023-04-27",
+    "updatedBy": "1",
+    "updatedOn": "2023-06-08"
+  },
+  "penalty": [
+    {
+      "dateOfOffence": {
+        "$date": "2023-02-01T00:00:00.000Z"
+      },
+      "offenceDescription": "Late Submission",
+      "actionTaken": "Warning",
+      "fineImposed": 50,
+      "month": 2,
+      "isCauseShownAgainstFine": false,
+      "witnessName": "Jane Doe",
+      "fineRealisedDate": {
+        "$date": "2023-02-10T00:00:00.000Z"
+      }
+    },
+    {
+      "dateOfOffence": {
+        "$date": "2023-03-15T00:00:00.000Z"
+      },
+      "offenceDescription": "Unauthorized Absence",
+      "actionTaken": "Deduction",
+      "fineImposed": 100,
+      "month": 3,
+      "isCauseShownAgainstFine": true,
+      "witnessName": "John Smith",
+      "fineRealisedDate": {
+        "$date": "2023-03-20T00:00:00.000Z"
+      }
+    }
+  ],
+  "disciplinaryAction": [
+    {
+      "actionTakenOn": {
+        "$date": "2023-03-01T00:00:00.000Z"
+      },
+      "issueReportedOn": {
+        "$date": "2023-02-25T00:00:00.000Z"
+      },
+      "issuedescription": "Misconduct",
+      "actionDescription": "Suspension",
+      "remark": "N/A",
+      "status": "Closed",
+      "documentPath": "/documents/disciplinary.pdf"
+    },
+    {
+      "actionTakenOn": {
+        "$date": "2023-04-10T00:00:00.000Z"
+      },
+      "issueReportedOn": {
+        "$date": "2023-04-05T00:00:00.000Z"
+      },
+      "issuedescription": "Policy Violation",
+      "actionDescription": "Written Warning",
+      "remark": "First warning issued",
+      "status": "Open",
+      "documentPath": "/documents/warning.pdf"
+    }
+  ]
+} 

@@ -1,0 +1,94 @@
+name: 🚀 Main App CI/CD
+
+on:
+  workflow_call:
+    secrets:
+      NEXTAUTH_SECRET:
+        required: true
+      NEXT_KEYCLOAK_CLIENT_SECRET:
+        required: true
+      NEXT_PUBLIC_API_BASE_URL:
+        required: true
+      NEXT_PUBLIC_API_BASE_URL_KEYCLOCK:
+        required: true
+      NEXT_KEYCLOAK_CLIENT_ID:
+        required: true
+      NEXT_KEYCLOAK_ISSUER:
+        required: true
+      NEXT_PUBLIC_MASTER_URL:
+        required: true
+      NEXT_PUBLIC_WORKFLOW_URL:
+        required: true
+      NEXT_PUBLIC_REPORTS_URL:
+        required: true
+      NEXT_PUBLIC_DASHBOARD_URL:
+        required: true
+      NEXT_PUBLIC_LEAVE_URL:
+        required: true
+      NEXT_PUBLIC_MUSTER_URL:
+        required: true
+      NEXT_PUBLIC_WAGES_URL:
+        required: true
+      NEXT_PUBLIC_OTAPPLICATION_URL:
+        required: true
+      DOCKER_USERNAME:
+        required: true
+      DOCKER_PASSWORD:
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.17.0
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm install -g turbo@1.9.3
+          npm install --legacy-peer-deps
+
+      - name: Build Main App
+        run: turbo run build --filter=main... --force
+        env:
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          NEXT_KEYCLOAK_CLIENT_SECRET: ${{ secrets.NEXT_KEYCLOAK_CLIENT_SECRET }}
+          NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
+          NEXT_PUBLIC_API_BASE_URL_KEYCLOCK: ${{ secrets.NEXT_PUBLIC_API_BASE_URL_KEYCLOCK }}
+          NEXT_KEYCLOAK_CLIENT_ID: ${{ secrets.NEXT_KEYCLOAK_CLIENT_ID }}
+          NEXT_KEYCLOAK_ISSUER: ${{ secrets.NEXT_KEYCLOAK_ISSUER }}
+          NEXT_PUBLIC_MASTER_URL: ${{ secrets.NEXT_PUBLIC_MASTER_URL }}
+          NEXT_PUBLIC_WORKFLOW_URL: ${{ secrets.NEXT_PUBLIC_WORKFLOW_URL }}
+          NEXT_PUBLIC_REPORTS_URL: ${{ secrets.NEXT_PUBLIC_REPORTS_URL }}
+          NEXT_PUBLIC_DASHBOARD_URL: ${{ secrets.NEXT_PUBLIC_DASHBOARD_URL }}
+          NEXT_PUBLIC_LEAVE_URL: ${{ secrets.NEXT_PUBLIC_LEAVE_URL }}
+          NEXT_PUBLIC_MUSTER_URL: ${{ secrets.NEXT_PUBLIC_MUSTER_URL }}
+          NEXT_PUBLIC_WAGES_URL: ${{ secrets.NEXT_PUBLIC_WAGES_URL }}
+          NEXT_PUBLIC_OTAPPLICATION_URL: ${{ secrets.NEXT_PUBLIC_OTAPPLICATION_URL }}
+
+      - name: Build & Push Docker Image
+        run: |
+          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          docker build \
+            --file apps/main/Dockerfile \
+            --build-arg NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}" \
+            --build-arg NEXT_KEYCLOAK_CLIENT_SECRET="${{ secrets.NEXT_KEYCLOAK_CLIENT_SECRET }}" \
+            --build-arg NEXT_PUBLIC_API_BASE_URL="${{ secrets.NEXT_PUBLIC_API_BASE_URL }}" \
+            --build-arg NEXT_PUBLIC_API_BASE_URL_KEYCLOCK="${{ secrets.NEXT_PUBLIC_API_BASE_URL_KEYCLOCK }}" \
+            --build-arg NEXT_KEYCLOAK_CLIENT_ID="${{ secrets.NEXT_KEYCLOAK_CLIENT_ID }}" \
+            --build-arg NEXT_KEYCLOAK_ISSUER="${{ secrets.NEXT_KEYCLOAK_ISSUER }}" \
+            --build-arg NEXT_PUBLIC_MASTER_URL="${{ secrets.NEXT_PUBLIC_MASTER_URL }}" \
+            --build-arg NEXT_PUBLIC_WORKFLOW_URL="${{ secrets.NEXT_PUBLIC_WORKFLOW_URL }}" \
+            --build-arg NEXT_PUBLIC_REPORTS_URL="${{ secrets.NEXT_PUBLIC_REPORTS_URL }}" \
+            --build-arg NEXT_PUBLIC_DASHBOARD_URL="${{ secrets.NEXT_PUBLIC_DASHBOARD_URL }}" \
+            --build-arg NEXT_PUBLIC_LEAVE_URL="${{ secrets.NEXT_PUBLIC_LEAVE_URL }}" \
+            --build-arg NEXT_PUBLIC_MUSTER_URL="${{ secrets.NEXT_PUBLIC_MUSTER_URL }}" \
+            --build-arg NEXT_PUBLIC_WAGES_URL="${{ secrets.NEXT_PUBLIC_WAGES_URL }}" \
+            --build-arg NEXT_PUBLIC_OTAPPLICATION_URL="${{ secrets.NEXT_PUBLIC_OTAPPLICATION_URL }}" \
+            -t "$DOCKER_USERNAME/inops-main-app:latest" .
+          docker push "$DOCKER_USERNAME/inops-main-app:latest"

@@ -1,0 +1,182 @@
+{
+  "basicInformation": {
+    "tabRequired": true,
+    "fields": {
+      "contractorName": { "required": false },
+      "contractorCode": { "required": true },
+      "aadharNumber": { "required": false },
+      "panNumber": { "required": false },
+      "ownerName": { "required": true },
+      "ownerContactNo": { "required": true },
+      "ownerEmailId": { "required": true },
+      "fatherName": { "required": false },
+      "contactPersonName": { "required": false },
+      "contactPersonContactNo": { "required": false },
+      "contactPersonEmailId": { "required": false },
+      "birthDate": { "required": false },
+      "workLocation": { "required": false },
+      "contractorImage": { "required": false },
+      "serviceSince": { "required": true }
+    }
+  },
+  "companyDetails": {
+    "tabRequired": false,
+    "fields": {
+      "typeOfCompany": { "required": true },
+      "workTypeCode": { "required": false },
+      "workTypeTitle": { "required": false },
+      "areaOfWorkCode": { "required": false },
+      "areaOfWorkTitle": { "required": false }
+    }
+  },
+  "bankDetail": {
+    "tabRequired": false,
+    "fields": {
+      "bankName": { "required": true },
+      "branchName": { "required": true },
+      "micrNo": { "required": false },
+      "ifscNo": { "required": true },
+      "bankAccountNo": { "required": true }
+    }
+  },
+  "document": {
+    "tabRequired": false,
+    "fields": {
+      "documentCategoryCode": { "required": false },
+      "documentCategoryTitle": { "required": false },
+      "documentTypeCode": { "required": false },
+      "documentTypeTitle": { "required": false },
+      "documentPath": { "required": false },
+      "identificationNumber": { "required": false }
+    }
+  },
+  "penalty": {
+    "tabRequired": true,
+    "fields": {
+      "dateOfOffence": { "required": true },
+      "actOfMisconduct": { "required": true },
+      "actionTaken": { "required": true },
+      "amount": { "required": true },
+      "month": { "required": false },
+      "witnessName": { "required": true },
+      "fineRealisedDate": { "required": false }
+    }
+  },
+  "securityDeposit": {
+    "tabRequired": true,
+    "fields": {
+      "depositDate": { "required": true },
+      "depositDetail": { "required": true },
+      "depositAmount": { "required": true }
+    }
+  },
+  "wcPolicy": {
+    "tabRequired": true,
+    "fields": {
+      "policyNumber": { "required": true },
+      "policyStartDate": { "required": true },
+      "policyExpiryDate": { "required": true },
+      "policyCompanyName": { "required": true },
+      "maximumWorkmen": { "required": true }
+    }
+  },
+  "workOrder": {
+    "tabRequired": true,
+    "meta": {
+      "minItems": 0
+    },
+    "fields": {
+      "workOrderNumber": { "required": true },
+      "workOrderDate": { "required": true },
+      "proposalReferenceNumber": { "required": false },
+      "NumberOfEmployee": { "required": true },
+      "contractPeriodFrom": { "required": true },
+      "contractPeriodTo": { "required": true },
+      "workOrderDocumentFilePath": { "required": false },
+      "annexureFilePath": { "required": false },
+      "serviceChargeAmount": { "required": false },
+      "workOrderType": { "required": true },
+      "workOrderLineItems": { "required": false },
+      "serviceLineItems": { "required": false },
+      "serviceCode": { "required": false },
+      "wcChargesPerEmployee": { "required": false },
+      "remarks": { "required": false }
+    },
+    "departments": {
+      "meta": {
+        "minItems": 0
+      },
+      "fields": {
+        "departmentCode": { "required": true },
+        "departmentName": { "required": true }
+      }
+    },
+    "assetChargesPerDay": {
+      "meta": {
+        "minItems": 0
+      },
+      "fields": {
+        "assetCode": { "required": true },
+        "assetName": { "required": true },
+        "assetCharges": { "required": true }
+      }
+    },
+    "employeeWages": {
+      "fields": {
+        "wageType": { "required": false },
+        "wageAmount": { "required": false }
+      }
+    },
+    "allocatedManPower": {
+      "meta": {
+        "minItems": 0
+      },
+      "fields": {
+        "skilledLevelTitle": { "required": true },
+        "skilledLevelDescription": { "required": false },
+        "manPower": { "required": true }
+      }
+    }
+  },
+  "addressInformation": {
+    "tabRequired": true,
+    "local": {
+      "fields": {
+        "localAddressLine1": { "required": true },
+        "localAddressLine2": { "required": false },
+        "localCountry": { "required": true },
+        "localState": { "required": true },
+        "localCity": { "required": true },
+        "localDistrict": { "required": false },
+        "localPincode": { "required": false },
+        "localContactNumber": { "required": false }
+      }
+    },
+    "corporate": {
+      "fields": {
+        "corporateAddressLine1": { "required": true },
+        "corporateAddressLine2": { "required": false },
+        "corporateCountry": { "required": true },
+        "corporateState": { "required": true },
+        "corporateCity": { "required": true },
+        "corporateDistrict": { "required": false },
+        "corporatePincode": { "required": false },
+        "corporateContactNumber": { "required": false }
+      }
+    }
+  },
+  "license": {
+    "tabRequired": true,
+    "meta": {
+      "minItems": 1
+    },
+    "fields": {
+      "licenseNo": { "required": false },
+      "natureOfWork": { "required": true },
+      "licenseFromDate": { "required": true },
+      "licenseToDate": { "required": true },
+      "workmen": { "required": true },
+      "issuedOn": { "required": true }
+    }
+  }
+}

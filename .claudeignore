@@ -1,0 +1,16 @@
+node_modules/
+dist/
+build/
+.next/
+.nuxt/
+out/
+coverage/
+.git/
+*.lock
+*.log
+*.map
+*.min.js
+*.min.css
+public/
+assets/
+static/

@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./*"],
+      "@repo/ui/*": ["../../packages/ui/src/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "../../packages/ui/src/components/form/common/logo-upload-form.tsx", "../../packages/ui/src/components/form/common/input-field.tsx", "../../packages/ui/src/components/form/common/checkbox-field.tsx", "../../packages/ui/src/components/form/common/radio-group-field.tsx", "../../packages/ui/src/components/form/common/RadioField.tsx", "../../packages/ui/src/components/form/common/select-field.tsx", "../../packages/ui/src/components/form/common/text-area-field.tsx", "../../packages/ui/src/components/form/form-structure.tsx", "../../packages/ui/src/components/form/common/Toggle-switch.tsx", "../../packages/ui/src/components/form-dynamic/sub-form-wrapper.tsx", "next.config.mjs"],
+  "exclude": ["node_modules"]
+}
